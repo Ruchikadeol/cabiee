@@ -1,0 +1,81 @@
+@import '../variable';
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  padding: 20px;
+  background-color: $color-primary;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  width: 200px;
+
+  &.collapsed {
+    width: 60px;
+    padding: 20px 10px;
+
+    .menu-text {
+      display: none;
+    }
+
+    .collapse-btn {
+      font-size: 12px;
+      padding: 6px;
+    }
+  }
+
+  .menu-list {
+    flex-grow: 1;
+    list-style: none;
+    padding: 0;
+
+    li {
+      margin-bottom: 16px;
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: $color-light;
+        text-decoration: none;
+        font-size: 16px;
+        padding: 10px;
+        border-radius: 8px;
+        transition: background 0.2s;
+
+        &:hover {
+          background-color: $color-gray;
+        }
+
+        &.active {
+          background-color: $color-dark;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .collapse-btn,
+    .logout-button {
+      background-color: $color-dark;
+      color: $color-light;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: background 0.2s;
+
+      &:hover {
+        background-color: $color-gray;
+      }
+    }
+  }
+}
