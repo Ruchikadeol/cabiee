@@ -1,24 +1,33 @@
-@import '../variable';
+@import "../variable";
 
 .users-page {
-  padding: 2rem;
-  //background-color: $color-light;
+  padding: 1.5rem;
   min-height: 100vh;
   color: $color-dark;
 
   h4 {
     color: $color-primary;
-    margin-bottom: 1.5rem;
+    padding: 0px;
     font-size: 1.8rem;
     font-weight: 600;
   }
 }
 
+.add-employee-btn {
+  background-color: $color-primary !important;
+  color: $color-light !important;
+
+}
+
+.add-employee-btn:hover {
+  background-color: $color-gray !important;
+}
 .custom-table-box {
   background-color: $color-gray;
-  border: 1px solid $color-primary;
+  border: 1px solid $color-dark;
   border-radius: 8px;
   overflow-x: auto;
+  min-height: 660px;
 }
 
 .employees-table {
@@ -39,7 +48,6 @@
     background-color: rgba(255, 255, 255, 0.05);
   }
 
-
   button {
     border-radius: 4px;
     font-size: 0.8rem;
@@ -55,13 +63,14 @@
 }
 
 .MuiDialog-paper {
-  background-color: $color-gray;
-  color: $color-light;
+  height: 460px;
+    min-height: 200px;
+    max-width: 560px;
   border-radius: 10px;
 }
 
 .dialog-box {
-  background-color: $color-dark;
+  color: $color-primary;
 
   .dialog-details {
     display: flex;
@@ -69,11 +78,11 @@
     gap: 12px;
 
     p {
-      border: 1px solid $color-primary;
+      border: 1px solid $color-gray;
       padding: 10px;
       border-radius: 6px;
-      background-color: $color-gray;
-      color: $color-light;
+      // background-color: $color-gray;
+        color: $color-primary;
     }
   }
 }
@@ -86,10 +95,14 @@
   border-top: 1px solid $color-primary;
 }
 
-
 //Employee main
-.employee-toolbar{
-display: flex;
-justify-content: space-around;
-align-items: center;
+.employee-toolbar {
+  display: flex;
+  justify-content: space-between;
+    align-items: center;
+}
+//view employee details
+.view-title {
+  display: flex;
+  justify-content: center;
 }

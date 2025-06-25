@@ -1,92 +1,134 @@
-import React, { useState } from 'react';
 import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper, Dialog, DialogTitle, DialogContent, DialogActions, Button,
-  Typography, CircularProgress
-} from '@mui/material';
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  CircularProgress,
+  Typography,
+  Select,
+  MenuItem,
+  Tooltip,
+} from "@mui/material";
 
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-const EmployeeTable = ({ employees, loading }) => {
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [open, setOpen] = useState(false);
+const stickyHeaderStyle = {
+  position: "sticky",
+  top: 0,
+  zIndex: 1,
+  fontWeight: "bold",
+};
 
-  const handleOpenDialog = (employee) => {
-    setSelectedEmployee(employee);
-    setOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpen(false);
-    setSelectedEmployee(null);
-  };
-
+const EmployeeTable = ({
+  employees,
+  loading,
+  onDeleteClick = () => {},
+  onViewClick = () => {},
+  onEditClick = () => {},
+  shiftFilter,
+  setShiftFilter,
+  shiftOptions = [],
+}) => {
   return (
-    <>
-      <TableContainer component={Paper} className="custom-table-box">
-        <Table aria-label="Employees Table" className="employees-table">
-          <TableHead>
-            <TableRow>
-              <TableCell><strong>Name</strong></TableCell>
-              <TableCell><strong>Phone</strong></TableCell>
-              <TableCell><strong>Address</strong></TableCell>
-              <TableCell><strong>Shift Timing</strong></TableCell>
-              <TableCell><strong>Action</strong></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {loading ? (
-              <TableRow>
-                <TableCell colSpan={5} align="center">
-                  <CircularProgress />
-                  <Typography variant="body2" style={{ marginTop: "0.5rem" }}>
-                    Loading employees...
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            ) : employees.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={5} align="center">
-                  <Typography variant="body2" color="textSecondary">
-                    No employee data found.
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            ) : (
-              employees.map((emp) => (
-                <TableRow key={emp.id}>
-                  <TableCell>{emp.name}</TableCell>
-                  <TableCell>{emp.phone_number}</TableCell>
-                  <TableCell>{emp.address?.address || 'N/A'}</TableCell>
-                  <TableCell>{emp.shift_timings || 'N/A'}</TableCell>
-                  <TableCell>
-                    <Button variant="outlined" size="small" onClick={() => handleOpenDialog(emp)}>
-                      View
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+    <TableContainer
+      component={Paper}
+      className="custom-table-box"
+      sx={{ maxHeight: 500, overflowY: "auto" }}
+    >
+      <Table stickyHeader>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={stickyHeaderStyle}>Name</TableCell>
+            <TableCell sx={stickyHeaderStyle}>Phone</TableCell>
+            <TableCell sx={stickyHeaderStyle}>Email</TableCell>
+            <TableCell sx={stickyHeaderStyle}>Address</TableCell>
+            <TableCell sx={stickyHeaderStyle}>
+              <Select
+                value={shiftFilter}
+                onChange={(e) => setShiftFilter(e.target.value)}
+                variant="standard"
+                displayEmpty
+                fullWidth
+                sx={{
+                  fontWeight: "normal",
+                  fontSize: "0.875rem",
+                }}
+              >
+                <MenuItem value="All">
+                  <strong>Shift Timings</strong>
+                </MenuItem>
+                {shiftOptions.map((shift) => (
+                  <MenuItem key={shift} value={shift}>
+                    {shift}
+                  </MenuItem>
+                ))}
+              </Select>
+            </TableCell>
+            <TableCell sx={stickyHeaderStyle}>Action</TableCell>
+          </TableRow>
+        </TableHead>
 
-      <Dialog open={open} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-        <DialogTitle>Employee Details</DialogTitle>
-        <DialogContent dividers className="dialog-box">
-          {selectedEmployee && (
-            <div className="dialog-details">
-              <p><strong>Name:</strong> {selectedEmployee.name}</p>
-              <p><strong>Phone:</strong> {selectedEmployee.phone_number}</p>
-              <p><strong>Address:</strong> {selectedEmployee.address?.address || 'N/A'}</p>
-              <p><strong>Shift Timing:</strong> {selectedEmployee.shift_timings || 'N/A'}</p>
-            </div>
+        <TableBody>
+          {loading ? (
+            <TableRow>
+              <TableCell colSpan={6} align="center">
+                <CircularProgress />
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  Loading employees...
+                </Typography>
+              </TableCell>
+            </TableRow>
+          ) : employees.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={6} align="center">
+                <Typography variant="body2" color="textSecondary">
+                  No employee data found.
+                </Typography>
+              </TableCell>
+            </TableRow>
+          ) : (
+            employees.map((emp) => (
+              <TableRow key={emp?.id}>
+                <TableCell>{emp?.name}</TableCell>
+                <TableCell>{emp?.phone_number}</TableCell>
+                <TableCell>{emp?.email}</TableCell>
+                <TableCell>{emp?.address?.address || "N/A"}</TableCell>
+                <TableCell>{emp?.shift_timings || "N/A"}</TableCell>
+                <TableCell>
+                  <Tooltip title="View">
+                    <IconButton
+                      size="small"
+                      onClick={() => onViewClick(emp.id)}
+                    >
+                      <VisibilityIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Edit">
+                    <IconButton
+                      size="small"
+                      onClick={() => onEditClick(emp.id)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <IconButton size="small" onClick={() => onDeleteClick(emp)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            ))
           )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">Close</Button>
-        </DialogActions>
-      </Dialog>
-    </>
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

@@ -20,13 +20,28 @@ export const getAllEmployeesApi = async (data) => {
   return makeApiCall('get', url, data)
 }
 
-export const addEmployeeApi = async (data) => {
-  const url = '/user/employees_onboard/'
-  return makeApiCall('post', url, data)
-}
+export const getSpecificEmployeeApi = async (id) => {
+  const url = `/employee/get/${id}/`;
+  return makeApiCall("get", url);
+};
 
+export const addEmployeeApi = async (data) => {
+  const url = "/user/employees_onboard/";
+  return makeApiCall("post", url, data);
+};
+
+export const updateEmployeeApi = async (id, data) => {
+  const url = `/user/update/${id}/`;
+  return makeApiCall("patch", url, data);
+};
+
+export const deleteEmployeeApi = async (id) => {
+  const url = `/owner/delete/${id}/`;
+  return makeApiCall("delete", url);
+};
 
 export const createOrganizationApi = async (data) => {
-  const url = '/user/company_registration/'
-  return makeApiCall('post', url, data)
-}
+  const url = "/user/company_registration/";
+  return makeApiCall("post", url, data);
+};
+

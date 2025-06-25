@@ -1,4 +1,4 @@
-import loginposter from './png/loginposter.jpg'
+import loginposter from "./png/loginposter.jpg";
+import CrossIcon from "./png/close.png";
 
-
-export {loginposter}
+export { loginposter, CrossIcon };

@@ -1,92 +1,129 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import {
-  Dialog, DialogTitle, DialogContent, DialogActions,
-  Stepper, Step, StepLabel, Button, TextField, Grid
-} from '@mui/material';
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Stepper,
+  Step,
+  StepLabel,
+  Button,
+  TextField,
+  MenuItem,
+  IconButton,
+  CircularProgress,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import Map from "./Map";
+import { SHIFT_TIMING } from "../../../constant/UserRole";
 
-const AddUpdateEmployee = ({ open, handleClose, onAddEmployee }) => {
+const AddUpdateEmployee = ({
+  open,
+  handleClose,
+  onAddOrUpdateEmployee,
+  initialValues = null,
+  loading = false,
+}) => {
+  const isEdit = !!initialValues;
+
   const [activeStep, setActiveStep] = useState(0);
-
   const [formData, setFormData] = useState({
-    email: '',
-    name: '',
-    password: '',
-    phone_number: '',
+    email: "",
+    name: "",
+    password: "",
+    phone_number: "",
+    shift_timings: "",
     address: {
-      address: '',
-      latitude: '',
-      longitude: ''
-    }
+      address: "",
+      latitude: "",
+      longitude: "",
+    },
   });
 
   const [errors, setErrors] = useState({});
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    if (['address', 'latitude', 'longitude'].includes(name)) {
-      setFormData((prev) => ({
-        ...prev,
-        address: {
-          ...prev.address,
-          [name]: value
-        }
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value
-      }));
-    }
-
-    // Clear error when user edits field
-    setErrors((prev) => ({
-      ...prev,
-      [name]: ''
-    }));
+  const resetForm = () => {
+    setFormData({
+      email: "",
+      name: "",
+      password: "",
+      phone_number: "",
+      shift_timings: "",
+      address: { address: "", latitude: "", longitude: "" },
+    });
+    setErrors({});
+    setActiveStep(0);
   };
 
-  const validateStep1 = () => {
-    const newErrors = {};
-    const { name, email, password, phone_number } = formData;
+  useEffect(() => {
+    if (initialValues) {
+      setFormData({
+        email: initialValues.email || "",
+        name: initialValues.name || "",
+        password: "", // Don't pre-fill password on edit
+        phone_number: initialValues.phone_number || "",
+        shift_timings: initialValues.shift_timings || "",
+        address: {
+          address: initialValues.address?.address || "",
+          latitude: initialValues.address?.latitude || "",
+          longitude: initialValues.address?.longitude || "",
+        },
+      });
+    } else {
+      resetForm();
+    }
+  }, [initialValues]);
 
-    if (!name.trim()) newErrors.name = 'Name is required';
-    if (!email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
-      newErrors.email = 'Invalid email format';
+  const handleChange = useCallback((e) => {
+    const { name, value } = e.target;
+    if (["address", "latitude", "longitude"].includes(name)) {
+      setFormData((prev) => ({
+        ...prev,
+        address: { ...prev.address, [name]: value },
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
-    if (!password.trim()) {
-      newErrors.password = 'Password is required';
-    } else if (password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-    if (!phone_number.trim()) {
-      newErrors.phone_number = 'Phone number is required';
-    } else if (!/^\d{10}$/.test(phone_number)) {
-      newErrors.phone_number = 'Phone must be 10 digits';
-    }
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  }, []);
+
+  const handleLocationSelect = useCallback(({ latitude, longitude }) => {
+    setFormData((prev) => ({
+      ...prev,
+      address: {
+        ...prev.address,
+        latitude,
+        longitude,
+      },
+    }));
+  }, []);
+
+  const validateStep1 = () => {
+    const { name, email, password, phone_number, shift_timings } = formData;
+    const newErrors = {};
+    if (!name.trim()) newErrors.name = "Name is required";
+    if (!email.trim()) newErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Invalid email";
+    if (!isEdit && !password.trim())
+      newErrors.password = "Password is required";
+    else if (!isEdit && password.length < 6)
+      newErrors.password = "Minimum 6 characters";
+    if (!/^\d{10}$/.test(phone_number))
+      newErrors.phone_number = "Enter valid 10-digit number";
+    if (!shift_timings.trim()) newErrors.shift_timings = "Select shift timing";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const validateStep2 = () => {
-    const newErrors = {};
     const { address, latitude, longitude } = formData.address;
-
-    if (!address.trim()) newErrors.address = 'Address is required';
-    if (!latitude.trim()) {
-      newErrors.latitude = 'Latitude is required';
-    } else if (isNaN(latitude)) {
-      newErrors.latitude = 'Latitude must be a number';
-    }
-    if (!longitude.trim()) {
-      newErrors.longitude = 'Longitude is required';
-    } else if (isNaN(longitude)) {
-      newErrors.longitude = 'Longitude must be a number';
-    }
-
+    const newErrors = {};
+    if (!address.trim()) newErrors.address = "Address is required";
+    if (!latitude || isNaN(latitude))
+      newErrors.latitude = "Latitude is required";
+    if (!longitude || isNaN(longitude))
+      newErrors.longitude = "Longitude is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -99,109 +136,213 @@ const AddUpdateEmployee = ({ open, handleClose, onAddEmployee }) => {
     }
   };
 
-  const handleBack = () => setActiveStep((prev) => prev - 1);
+  const handleBack = () => {
+    setActiveStep((prev) => prev - 1);
+  };
 
   const handleSubmit = () => {
-    console.log('Form submitted:', formData);
-      onAddEmployee(formData); 
-    handleClose();
+    const dataToSubmit = { ...formData };
+    if (isEdit) delete dataToSubmit.password;
+    onAddOrUpdateEmployee(dataToSubmit, isEdit ? initialValues.id : null);
     resetForm();
   };
 
-  const resetForm = () => {
-    setFormData({
-      email: '',
-      name: '',
-      password: '',
-      phone_number: '',
-      address: {
-        address: '',
-        latitude: '',
-        longitude: ''
-      }
-    });
-    setActiveStep(0);
-    setErrors({});
-  };
+  const memoizedUserForm = useMemo(
+    () => (
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "16px",
+          marginTop: "16px",
+        }}
+      >
+        {/* Name */}
+        <div style={{ flex: "1 1 45%" }}>
+          <TextField
+            fullWidth
+            label="NAME"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            error={!!errors.name}
+            helperText={errors.name || ""}
+            disabled={loading}
+          />
+        </div>
 
-  const userFields = (
-    <Grid container spacing={2}>
-      <Grid item xs={12} sm={6}>
+        {/* Email (disabled in edit mode) */}
+        <div style={{ flex: "1 1 45%" }}>
+          <TextField
+            fullWidth
+            label="EMAIL"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            error={!!errors.email}
+            helperText={errors.email || ""}
+            disabled={isEdit || loading} // ← Disabled in edit mode
+          />
+        </div>
+
+        {/* Password (only in add mode) */}
+        {!isEdit && (
+          <div style={{ flex: "1 1 45%" }}>
+            <TextField
+              fullWidth
+              label="PASSWORD"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              error={!!errors.password}
+              helperText={errors.password || ""}
+              disabled={loading}
+            />
+          </div>
+        )}
+
+        {/* Phone Number */}
+        <div style={{ flex: "1 1 45%" }}>
+          <TextField
+            fullWidth
+            label="PHONE NUMBER"
+            name="phone_number"
+            value={formData.phone_number}
+            onChange={handleChange}
+            error={!!errors.phone_number}
+            helperText={errors.phone_number || ""}
+            disabled={loading}
+          />
+        </div>
+
+        {/* Shift Timings */}
         <TextField
-          fullWidth label="Name" name="name"
-          value={formData.name} onChange={handleChange}
-          error={!!errors.name} helperText={errors.name}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-          fullWidth label="Email" name="email"
-          value={formData.email} onChange={handleChange}
-          error={!!errors.email} helperText={errors.email}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-          fullWidth label="Password" name="password"
-          type="password" value={formData.password} onChange={handleChange}
-          error={!!errors.password} helperText={errors.password}
-        />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField
-          fullWidth label="Phone Number" name="phone_number"
-          value={formData.phone_number} onChange={handleChange}
-          error={!!errors.phone_number} helperText={errors.phone_number}
-        />
-      </Grid>
-    </Grid>
+          select
+          fullWidth
+          label="Select Shift Timings"
+          name="shift_timings"
+          value={formData.shift_timings}
+          onChange={handleChange}
+          error={!!errors.shift_timings}
+          helperText={errors.shift_timings || ""}
+          disabled={loading}
+        >
+          <MenuItem value="">Select a shift</MenuItem>
+          {SHIFT_TIMING.map((option) => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
+    ),
+    [formData, errors, handleChange, loading, isEdit]
   );
 
-  const addressFields = (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <TextField
-          fullWidth label="Address" name="address"
-          value={formData.address.address} onChange={handleChange}
-          error={!!errors.address} helperText={errors.address}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <TextField
-          fullWidth label="Latitude" name="latitude"
-          value={formData.address.latitude} onChange={handleChange}
-          error={!!errors.latitude} helperText={errors.latitude}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        <TextField
-          fullWidth label="Longitude" name="longitude"
-          value={formData.address.longitude} onChange={handleChange}
-          error={!!errors.longitude} helperText={errors.longitude}
-        />
-      </Grid>
-    </Grid>
+  const memoizedMap = useMemo(
+    () => (
+      <Map
+        latitude={formData.address.latitude || 30.7333}
+        longitude={formData.address.longitude || 76.7794}
+        onLocationSelect={handleLocationSelect}
+      />
+    ),
+    [
+      formData.address.latitude,
+      formData.address.longitude,
+      handleLocationSelect,
+    ]
   );
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Add Employee</DialogTitle>
-      <DialogContent dividers>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      maxWidth={false}
+      PaperProps={{
+        sx: {
+          width: "700px",
+          height: "600px",
+          maxWidth: "95vw",
+          maxHeight: "95vh",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+        },
+      }}
+    >
+      <DialogTitle sx={{ m: 0, p: 2, position: "relative" }}>
+        {isEdit ? "Edit Employee" : "Add Employee"}
+        <IconButton
+          onClick={handleClose}
+          size="small"
+          disableRipple
+          disableFocusRipple
+          disableTouchRipple
+          className="clear-icon-button"
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+
+      <DialogContent
+        dividers
+        sx={{
+          flexGrow: 1,
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Stepper activeStep={activeStep} alternativeLabel>
-          <Step><StepLabel>User Info</StepLabel></Step>
-          <Step><StepLabel>Address</StepLabel></Step>
+          <Step>
+            <StepLabel>User Info</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Address</StepLabel>
+          </Step>
         </Stepper>
 
-        <div style={{ marginTop: '20px' }}>
-          {activeStep === 0 ? userFields : addressFields}
-        </div>
+        {activeStep === 0 ? (
+          memoizedUserForm
+        ) : (
+          <div style={{ marginTop: 16 }}>
+            <TextField
+              fullWidth
+              label="Address"
+              name="address"
+              value={formData.address.address}
+              onChange={handleChange}
+              error={!!errors.address}
+              helperText={errors.address}
+              sx={{ mb: 2 }}
+              disabled={loading}
+            />
+            {memoizedMap}
+          </div>
+        )}
       </DialogContent>
+
       <DialogActions>
         {activeStep > 0 && (
-          <Button onClick={handleBack}>Back</Button>
+          <Button onClick={handleBack} disabled={loading}>
+            Back
+          </Button>
         )}
-        <Button onClick={handleNext} variant="contained" color="primary">
-          {activeStep === 0 ? 'Next' : 'Submit'}
+        <Button
+          variant="contained"
+          onClick={handleNext}
+          disabled={loading}
+          startIcon={loading && <CircularProgress size={16} />}
+        >
+          {activeStep === 1 ? (isEdit ? "Update" : "Submit") : "Next"}
         </Button>
       </DialogActions>
     </Dialog>
