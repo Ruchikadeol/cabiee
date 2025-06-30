@@ -73,3 +73,9 @@ margin: 10px;
   border: none !important;
   outline: none !important;
 }
+.MuiIconButton-root:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  outline: none !important;
+}

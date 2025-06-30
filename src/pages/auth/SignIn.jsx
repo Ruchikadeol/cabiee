@@ -75,19 +75,26 @@ const Signin = () => {
         password: formData.password,
       };
       const result = await logInApi(payload);
-      console.log(result);
+      const userData = result?.data?.data;
 
-      localStorage.setItem("authToken", result?.data?.data?.tokens?.access );
-       localStorage.setItem("refreshToken", result?.data?.data?.tokens?.refresh );
+      localStorage.setItem("authToken", userData?.tokens?.access);
+      localStorage.setItem("refreshToken", userData?.tokens?.refresh);
       localStorage.setItem("userEmail", formData.email);
-       localStorage.setItem("userRole", result?.data?.data?.user?.role );
-
-      navigate("/");
+      localStorage.setItem("userRole", userData?.user?.role);
+      localStorage.setItem(
+        "organisationExists",
+        userData?.admin?.organisation ? "true" : "false"
+      );
+      // Redirect based on organisation presence
+      if (userData?.user?.role === "admin" && !userData?.admin?.organisation) {
+        navigate("/organisation");
+      } else {
+        navigate("/");
+      }
     } catch (error) {
       console.warn("Error in fetching", error);
     }
   };
-
   return (
     <div className="signin_wrapper">
       <div className="left-side">
@@ -140,7 +147,7 @@ const Signin = () => {
           className="login-poster"
           loading="lazy"
           decoding="async"
-          alt="Basketball Player"
+          alt="Cab Pickup"
         />
       </div>
     </div>

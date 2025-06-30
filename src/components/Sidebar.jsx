@@ -38,30 +38,47 @@ const Sidebar = () => {
   if (isMobile) return null; // Don’t show sidebar on mobile, it’s handled in Header
 
   return (
-    <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+    <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
       <div className="sidebar-content">
         <ul className="menu-list">
-          {accessibleItems.map((item) => (
-            <li key={item}>
-              <NavLink
-                to={`/${item}`}
-                className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-              >
-                {ICONS[item] || '📁'}
-                {!isCollapsed && (
-                  <span className="menu-text">
-                    {item.charAt(0).toUpperCase() + item.slice(1)}
-                  </span>
-                )}
-              </NavLink>
-            </li>
-          ))}
+          {accessibleItems.map((item) => {
+            const isOrganisationCreated =
+              localStorage.getItem("organisationExists") === "true";
+            const isDisabled =
+              !isOrganisationCreated && item !== "organisation";
+
+            return (
+              <li key={item}>
+                <NavLink
+                  to={isDisabled ? "#" : `/${item}`}
+                  className={({ isActive }) =>
+                    `nav-item ${isActive ? "active" : ""} ${
+                      isDisabled ? "disabled-link" : ""
+                    }`
+                  }
+                  onClick={(e) => {
+                    if (isDisabled) e.preventDefault();
+                  }}
+                >
+                  {ICONS[item] || "📁"}
+                  {!isCollapsed && (
+                    <span className="menu-text">
+                      {item.charAt(0).toUpperCase() + item.slice(1)}
+                    </span>
+                  )}
+                </NavLink>
+              </li>
+            );
+          })}
         </ul>
       </div>
 
       <div className="sidebar-footer">
-        <button className="collapse-btn" onClick={() => setIsCollapsed(!isCollapsed)}>
-          {isCollapsed ? '>>' : 'Hide Sidebar <<'}
+        <button
+          className="collapse-btn"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          {isCollapsed ? ">>" : "Hide Sidebar <<"}
         </button>
         <button className="logout-button" onClick={handleLogout}>
           <Logout />

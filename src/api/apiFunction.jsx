@@ -45,3 +45,22 @@ export const createOrganizationApi = async (data) => {
   return makeApiCall("post", url, data);
 };
 
+export const updateOrganisationApi = async (data) => {
+  const url = `/organisation/update/`;
+  return makeApiCall("patch", url, data);
+};
+
+export const createGroupsApi = async (data) => {
+  const url = "/group/create/";
+  return makeApiCall("post", url, data);
+};
+
+export const getAllGroupsApi = async (data) => {
+  const url = "/group/get/";
+  return makeApiCall("get", url, data);
+};
+
+export const getSpecificGroupApi = async (id) => {
+  const url = `/group/group-details/${id}`;
+  return makeApiCall("get", url);
+};

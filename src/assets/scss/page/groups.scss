@@ -1,0 +1,144 @@
+@import '../variable';
+
+
+.groups-wrapper {
+  padding: 2rem;
+  background: $color-white;
+  min-height: 100vh;  
+
+  .groups-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h3 {
+      font-size: 24px;
+      color: $color-dark;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      background-color: $color-primary;
+      color: $color-white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: darken($color-primary, 10%);
+      }
+    }
+  }
+}
+
+.group-card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.group-card {
+  background-color: $color-white;
+  border: 1px solid $color-light;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: all 0.3s ease; 
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: $color-gray;
+    margin-bottom: 0.5rem;
+  }
+
+ .card-body {
+  display: flex;
+  flex-direction: column;
+
+  .top-row {
+    display: flex;
+   // justify-content: space-around;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 0.5rem;
+
+    .size {
+      color: $color-dark;
+    }
+
+    .toggle-btn {
+      background-color: $color-primary;
+      color: $color-white;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+
+      &:hover {
+        background-color: darken($color-primary, 8%);
+      }
+    }
+  }
+
+  .bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.75rem;
+
+    .status {
+      padding: 2px 8px;
+      border-radius: 20px;
+      background-color: $color-light;
+      text-transform: capitalize;
+
+      &.pending {
+        background-color: lighten($color-blue, 35%);
+        color: $color-blue;
+      }
+
+      &.active {
+        background-color: lighten($color-green, 35%);
+        color: $color-green;
+      }
+
+      &.inactive {
+        background-color: lighten($color-error, 35%);
+        color: $color-error;
+      }
+    }
+
+    .view-chat {
+      display: flex;
+      gap: 0.5rem;
+    }
+  }
+
+  
+  .description.expanded {
+    margin-top: 0.75rem;
+    background-color: $color-light;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-size: 14px;
+    color: $color-dark;
+
+    ul {
+      padding-left: 1rem;
+      margin: 0;
+
+      li {
+        list-style: disc;
+        padding: 2px 0;
+      }
+    }
+  }
+}
+}

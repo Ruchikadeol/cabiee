@@ -161,7 +161,7 @@ const AddUpdateEmployee = ({
         <div style={{ flex: "1 1 45%" }}>
           <TextField
             fullWidth
-            label="NAME"
+            label="Name"
             name="name"
             value={formData.name}
             onChange={handleChange}
@@ -175,7 +175,7 @@ const AddUpdateEmployee = ({
         <div style={{ flex: "1 1 45%" }}>
           <TextField
             fullWidth
-            label="EMAIL"
+            label="Email"
             name="email"
             value={formData.email}
             onChange={handleChange}
@@ -190,7 +190,7 @@ const AddUpdateEmployee = ({
           <div style={{ flex: "1 1 45%" }}>
             <TextField
               fullWidth
-              label="PASSWORD"
+              label="Password"
               name="password"
               type="password"
               value={formData.password}
@@ -206,7 +206,7 @@ const AddUpdateEmployee = ({
         <div style={{ flex: "1 1 45%" }}>
           <TextField
             fullWidth
-            label="PHONE NUMBER"
+            label="Phone Number"
             name="phone_number"
             value={formData.phone_number}
             onChange={handleChange}

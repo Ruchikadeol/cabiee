@@ -119,8 +119,6 @@ const Signup = () => {
 
     try {
       const response = await adminSignupApi(payload);
-      console.log("response", response);
-      // Optional: check response format
       if (response?.data?.success) {
         toast.success("Signup successful! 🎉");
         // localStorage.setItem("authToken", response.token || "dummy-token");
