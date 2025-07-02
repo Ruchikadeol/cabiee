@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  createOrganizationApi,
+  createOrganisationApi,
   updateOrganisationApi,
 } from "../../../api/apiFunction";
 import { toast } from "react-toastify";
@@ -50,7 +50,7 @@ const Organisation = () => {
         response = await updateOrganisationApi(formData);
         toast.success("Organisation updated successfully!");
       } else {
-        response = await createOrganizationApi(formData);
+        response = await createOrganisationApi(formData);
         if (response?.data?.success) {
           localStorage.setItem("organisationExists", "true");
           toast.success("Organisation created successfully!");

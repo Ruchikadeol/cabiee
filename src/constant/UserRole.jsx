@@ -1,7 +1,7 @@
 export const ROLE_ACCESS = {
-    admin: ['dashboard','organisation', 'employees', 'groups'],
-  CAB_DRIVER: ['dashboard', 'tender', 'history'],
-  EMPLOYEE: ['dashboard', 'rides'],
+  admin: ["dashboard", "organisation", "employees", "tenders", "groups"],
+  CAB_DRIVER: ["dashboard", "tenders", "history"],
+  EMPLOYEE: ["dashboard", "rides"],
 };
 
 export const SHIFT_TIMING = [
@@ -10,5 +10,3 @@ export const SHIFT_TIMING = [
   "2pm - 11pm",
   "10pm - 7am",
 ];
-
-

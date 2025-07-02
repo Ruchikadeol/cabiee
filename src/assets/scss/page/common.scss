@@ -1,5 +1,13 @@
 @import '../variable';
 
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; // prevent page scroll
+  height: 100%;
+}
+
 //Common Searchbar scss
 
 .common-search-bar {

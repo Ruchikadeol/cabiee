@@ -1,4 +1,13 @@
-import { Home, Employees, Signin, Signup, DriverSignup, Groups, Organisation } from "../pages";
+import {
+  Home,
+  Employees,
+  Signin,
+  Signup,
+  DriverSignup,
+  Groups,
+  Organisation,
+  Tenders,
+} from "../pages";
 export const ROUTES_BEFORE_LOGIN = {
   SIGNIN: {
     path: "/signin",
@@ -17,7 +26,6 @@ export const ROUTES_BEFORE_LOGIN = {
     element: DriverSignup,
     key: "driversignup",
   },
-
 
   NOT_FOUND: {
     path: "*",
@@ -39,7 +47,7 @@ export const ROUTES_AFTER_LOGIN = {
     key: "home",
   },
 
-    EMPLOYEES: {
+  EMPLOYEES: {
     path: "/employees",
     element: Employees,
     key: "employees",
@@ -50,10 +58,15 @@ export const ROUTES_AFTER_LOGIN = {
     element: Groups,
     key: "groups",
   },
-    ORGANISATION: {
+  ORGANISATION: {
     path: "/organisation",
     element: Organisation,
     key: "organisation",
+  },
+  TENDERS: {
+    path: "/tenders",
+    element: Tenders,
+    key: "tenders",
   },
 
   NOT_FOUND: {

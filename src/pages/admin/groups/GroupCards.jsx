@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Tooltip from "@mui/material/Tooltip";
-import ChatIcon from "@mui/icons-material/Chat";
+
 const formatDate = (dateStr) =>
   new Date(dateStr).toLocaleDateString("en-IN", {
     year: "numeric",
@@ -10,7 +10,12 @@ const formatDate = (dateStr) =>
     day: "numeric",
   });
 
-const GroupCards = ({ groups, onViewGroup }) => {
+const GroupCards = ({
+  groups,
+  onSelectGroup,
+  onViewGroup,
+  selectedGroupId,
+}) => {
   const [expandedGroupIds, setExpandedGroupIds] = useState([]);
 
   const toggleGroupExpand = (groupId) => {
@@ -26,7 +31,14 @@ const GroupCards = ({ groups, onViewGroup }) => {
   return (
     <div className="group-card-container">
       {groups.map((group) => (
-        <div key={group?.id} className="group-card">
+        <div
+          key={group?.id}
+          className={`group-card ${
+            selectedGroupId === group?.id ? "selected" : ""
+          }`}
+          // onClick={() => onViewGroup(group.id)}
+          onClick={() => onSelectGroup(group)}
+        >
           <div className="card-header">
             <span className="date">
               Created: {formatDate(group?.created_at)}
@@ -36,56 +48,58 @@ const GroupCards = ({ groups, onViewGroup }) => {
             </span>
           </div>
 
-         <div className="card-body">
-  <div className="top-row">
-    <div className="size">👥 {group?.group_size} Members </div>
-    <button
-      className="toggle-btn"
-      onClick={() => toggleGroupExpand(group?.id)}
-    >
-      {expandedGroupIds.includes(group?.id) ? "Hide less" : "View More"}
-    </button>
-  </div>
+          <div className="card-body">
+            <div className="top-row">
+              <div className="size">
+                👥 {group?.group_size} Members:{" "}
+                <span
+                  className="toggle-link"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent card click from triggering selection
+                    toggleGroupExpand(group?.id);
+                  }}
+                >
+                  {expandedGroupIds.includes(group?.id)
+                    ? "Hide less"
+                    : "View More"}
+                </span>
+              </div>
+            </div>
 
-  {expandedGroupIds.includes(group?.id) && (
-    <div className="description expanded">
-      <strong>Members:</strong>
-      <ul>
-        {group.description
-          ?.split(" ")
-          .filter(Boolean)
-          .map((name, idx) => (
-            <li key={idx}>👤 {name}</li>
-          ))}
-      </ul>
-    </div>
-  )}
+            {expandedGroupIds.includes(group?.id) && (
+              <div className="description expanded">
+                <strong>Members:</strong>
+                <ul>
+                  {group.description
+                    ?.split(" ")
+                    .filter(Boolean)
+                    .map((name, idx) => (
+                      <li key={idx}>👤 {name}</li>
+                    ))}
+                </ul>
+              </div>
+            )}
 
-
-  <div className="bottom-row">
-    <div className={`status ${group?.status?.toLowerCase()}`}>
-      {group.status}
-    </div>
-    <div className="view-chat">
-      <Tooltip title="View Details">
-        <IconButton
-          size="small"
-          color="primary"
-          onClick={() => onViewGroup(group.id)}
-        >
-          <VisibilityIcon />
-        </IconButton>
-      </Tooltip>
-
-      <Tooltip title="Chat">
-        <IconButton size="small" color="primary">
-          <ChatIcon />
-        </IconButton>
-      </Tooltip>
-    </div>
-  </div>
-</div>
-
+            <div className="bottom-row">
+              <div className={`status ${group?.status?.toLowerCase()}`}>
+                {group.status}
+              </div>
+              <div className="view-chat">
+                <Tooltip title="View Details">
+                  <IconButton
+                    size="small"
+                    color="primary"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent card click from triggering again
+                      onViewGroup(group.id);
+                    }}
+                  >
+                    <VisibilityIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            </div>
+          </div>
         </div>
       ))}
     </div>

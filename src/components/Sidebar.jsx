@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { ROLE_ACCESS } from '../constant/UserRole';
-import { Logout, Dashboard, Group, People, LocalTaxi, History, Commute, Business } from '@mui/icons-material';
-
+import React, { useState, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { ROLE_ACCESS } from "../constant/UserRole";
+import {
+  Logout,
+  Dashboard,
+  Group,
+  People,
+  LocalTaxi,
+  History,
+  Commute,
+  Business,
+} from "@mui/icons-material";
 
 const ICONS = {
   dashboard: <Dashboard />,
@@ -11,9 +19,8 @@ const ICONS = {
   tender: <LocalTaxi />,
   history: <History />,
   rides: <Commute />,
-  organisation: <Business />, 
+  organisation: <Business />,
 };
-
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
