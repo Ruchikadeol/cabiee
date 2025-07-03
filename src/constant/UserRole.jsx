@@ -1,7 +1,7 @@
 export const ROLE_ACCESS = {
   admin: ["dashboard", "organisation", "employees", "tenders", "groups"],
-  CAB_DRIVER: ["dashboard", "tenders", "history"],
-  EMPLOYEE: ["dashboard", "rides"],
+  driver: ["dashboard", "tenders", "history"],
+  employee: ["dashboard", "rides"],
 };
 
 export const SHIFT_TIMING = [

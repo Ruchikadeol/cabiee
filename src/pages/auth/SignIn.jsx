@@ -100,7 +100,7 @@ const Signin = () => {
       <div className="left-side">
         <form onSubmit={handleSubmit}>
           <div className="input-wrapper signin">
-            <h2>Welcome back</h2>
+            <h2>Welcome Back!</h2>
             <p>Please enter your details</p>
 
             <CommonInput

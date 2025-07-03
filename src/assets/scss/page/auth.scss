@@ -22,8 +22,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    box-sizing: border-box;
     padding: 16px;
+    overflow-y: auto; // for mobile
   }
 
   .right-side {
@@ -40,14 +40,14 @@
     }
   }
 
-  // Tablet
+  // Tablet adjustments
   @media (max-width: 1024px) {
     .left-side {
       max-width: 600px;
     }
   }
 
-  // Mobile
+  // Mobile adjustments
   @media (max-width: 768px) {
     flex-direction: column;
 
@@ -68,36 +68,46 @@
     .input-wrapper {
       width: 100%;
       max-width: 360px;
+      max-height: 80vh;
+      overflow-y: auto;
     }
   }
 }
 
 .input-wrapper {
-  width: 420px;
-   min-height: 550px;
-  max-height: 90vh; 
+  width: 100%;
+  max-width: 540px;
+  min-height: 540px;
   background-color: $color-gray;
   padding: 24px;
   border-radius: 16px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
-  
-&.signin{
-    height: 440px;
+  align-content: flex-start;
+  overflow: hidden;
 
-}
-  h2 {
-    color: $color-secondary;
-    margin-bottom: 0;
+  &.signin {
+    min-height: 440px;
+    grid-template-columns: 1fr; // Signin has fewer fields
   }
 
-  p {
-    color: $color-light;
-    font-size: 14px;
-    margin-bottom: 8px;
+  
+  h2, p {
+    grid-column: 1 / -1;
+     margin:0px;
+  }
+
+  .primary-button {
+    grid-column: 1 / -1;
+    margin-top: auto;
+  }
+
+  .signup-account,
+  .signin-account {
+    grid-column: 1 / -1;
+    text-align: center;
   }
 }
 
@@ -138,14 +148,12 @@
 .primary-button {
   background-color: $color-green;
   color: $color-white;
-  // width: 100%;
   padding: 10px;
   border: none;
   border-radius: 12px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  margin-top: auto;
 
   &:hover {
     background-color: darken($color-green, 5%);
@@ -156,7 +164,6 @@
 .signin-account {
   font-size: 12px;
   color: $color-light;
-  text-align: center;
 
   .sign-up-link,
   .sign-in-link {

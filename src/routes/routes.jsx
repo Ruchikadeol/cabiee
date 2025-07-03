@@ -36,23 +36,20 @@ export const ROUTES_BEFORE_LOGIN = {
 
 export const ROUTES_AFTER_LOGIN = {
   DEFAULT: {
-    path: "/", // This is the empty root path
+    path: "/",
     element: Home,
     key: "default_home",
   },
-
   HOME: {
     path: "/dashboard",
     element: Home,
     key: "home",
   },
-
   EMPLOYEES: {
     path: "/employees",
     element: Employees,
     key: "employees",
   },
-
   GROUPS: {
     path: "/groups",
     element: Groups,
@@ -68,7 +65,6 @@ export const ROUTES_AFTER_LOGIN = {
     element: Tenders,
     key: "tenders",
   },
-
   NOT_FOUND: {
     path: "*",
     element: Home,

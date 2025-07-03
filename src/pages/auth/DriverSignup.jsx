@@ -19,6 +19,8 @@ const DriverSignup = () => {
     confirmPassword: "",
     address: "",
     vehicle_number: "",
+    bank_account: "",
+    ifsc: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -76,6 +78,16 @@ const DriverSignup = () => {
       valid = false;
     }
 
+    if (!formData.bank_account.trim()) {
+      newErrors.bank_account = "Bank account is required";
+      valid = false;
+    }
+
+    if (!formData.ifsc.trim()) {
+      newErrors.ifsc = "IFSC code is required";
+      valid = false;
+    }
+
     if (!formData.password) {
       newErrors.password = "Password is required";
       valid = false;
@@ -107,6 +119,8 @@ const DriverSignup = () => {
       password: formData.password,
       address: formData.address,
       vehicle_number: formData.vehicle_number,
+      bank_account: formData.bank_account,
+      ifsc: formData.ifsc,
     };
 
     try {
@@ -130,7 +144,7 @@ const DriverSignup = () => {
       <div className="left-side">
         <form onSubmit={handleSubmit}>
           <div className="input-wrapper">
-            <h2>Welcome Driver</h2>
+            <h2>Welcome!</h2>
             <p>Please enter your details</p>
 
             <CommonInput
@@ -180,6 +194,24 @@ const DriverSignup = () => {
             />
 
             <CommonInput
+              label="Bank Account Number"
+              name="bank_account"
+              value={formData.bank_account}
+              onChange={handleChange}
+              placeholder="Enter your bank account number"
+              error={errors.bank_account}
+            />
+
+            <CommonInput
+              label="IFSC Code"
+              name="ifsc"
+              value={formData.ifsc}
+              onChange={handleChange}
+              placeholder="Enter your IFSC code"
+              error={errors.ifsc}
+            />
+
+            <CommonInput
               label="Password"
               name="password"
               type="password"
@@ -187,6 +219,7 @@ const DriverSignup = () => {
               onChange={handleChange}
               placeholder="Enter your password"
               error={errors.password}
+              isPassword={true}
             />
 
             <CommonInput
@@ -197,6 +230,7 @@ const DriverSignup = () => {
               onChange={handleChange}
               placeholder="Re-enter your password"
               error={errors.confirmPassword}
+              isPassword={true}
             />
 
             <PrimaryButton type="submit">Sign Up</PrimaryButton>

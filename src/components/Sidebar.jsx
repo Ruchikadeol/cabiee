@@ -16,23 +16,22 @@ const ICONS = {
   dashboard: <Dashboard />,
   employees: <People />,
   groups: <Group />,
-  tender: <LocalTaxi />,
+  tenders: <LocalTaxi />,
   history: <History />,
   rides: <Commute />,
   organisation: <Business />,
 };
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
-  const navigate = useNavigate();
 
-  const userRole = localStorage.getItem("userRole") || "admin";
+  const userRole = localStorage.getItem("userRole")?.toLowerCase() || "admin";
   const accessibleItems = ROLE_ACCESS[userRole] || [];
 
-  const handleResize = () => setIsMobile(window.innerWidth < 700);
-
   useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 700);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -42,7 +41,7 @@ const Sidebar = () => {
     navigate("/signin");
   };
 
-  if (isMobile) return null; // Don’t show sidebar on mobile, it’s handled in Header
+  if (isMobile) return null;
 
   return (
     <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
@@ -51,8 +50,11 @@ const Sidebar = () => {
           {accessibleItems.map((item) => {
             const isOrganisationCreated =
               localStorage.getItem("organisationExists") === "true";
+
             const isDisabled =
-              !isOrganisationCreated && item !== "organisation";
+              userRole === "admin" &&
+              !isOrganisationCreated &&
+              item !== "organisation";
 
             return (
               <li key={item}>

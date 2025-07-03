@@ -46,65 +46,64 @@ const Signup = () => {
   };
 
   const handleValidate = () => {
-  let valid = true;
-  const newErrors = {
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    phone_number: "",
+    let valid = true;
+    const newErrors = {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      phone_number: "",
+    };
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Username field is required";
+      valid = false;
+      console.log("Name validation failed");
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email field is required";
+      valid = false;
+      console.log("Email is empty");
+    } else if (!isValidEmail(formData.email)) {
+      newErrors.email = "Invalid email format";
+      valid = false;
+      console.log("Email format invalid");
+    }
+
+    if (!formData.phone_number.trim()) {
+      newErrors.phone_number = "Phone number is required";
+      valid = false;
+      console.log("Phone number is empty");
+    } else if (!/^\d{10}$/.test(formData.phone_number)) {
+      newErrors.phone_number = "Phone number must be 10 digits";
+      valid = false;
+      console.log("Phone number invalid format");
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Password field is required";
+      valid = false;
+      console.log("Password empty");
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+      valid = false;
+      console.log("Password too short");
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Confirm Password field is required";
+      valid = false;
+      console.log("Confirm Password empty");
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+      valid = false;
+      console.log("Password mismatch");
+    }
+
+    setErrors(newErrors);
+    return valid;
   };
-
-  if (!formData.name.trim()) {
-    newErrors.name = "Username field is required";
-    valid = false;
-    console.log("Name validation failed");
-  }
-
-  if (!formData.email.trim()) {
-    newErrors.email = "Email field is required";
-    valid = false;
-    console.log("Email is empty");
-  } else if (!isValidEmail(formData.email)) {
-    newErrors.email = "Invalid email format";
-    valid = false;
-    console.log("Email format invalid");
-  }
-
-  if (!formData.phone_number.trim()) {
-    newErrors.phone_number = "Phone number is required";
-    valid = false;
-    console.log("Phone number is empty");
-  } else if (!/^\d{10}$/.test(formData.phone_number)) {
-    newErrors.phone_number = "Phone number must be 10 digits";
-    valid = false;
-    console.log("Phone number invalid format");
-  }
-
-  if (!formData.password) {
-    newErrors.password = "Password field is required";
-    valid = false;
-    console.log("Password empty");
-  } else if (formData.password.length < 8) {
-    newErrors.password = "Password must be at least 8 characters";
-    valid = false;
-    console.log("Password too short");
-  }
-
-  if (!formData.confirmPassword) {
-    newErrors.confirmPassword = "Confirm Password field is required";
-    valid = false;
-    console.log("Confirm Password empty");
-  } else if (formData.password !== formData.confirmPassword) {
-    newErrors.confirmPassword = "Passwords do not match";
-    valid = false;
-    console.log("Password mismatch");
-  }
-
-  setErrors(newErrors);
-  return valid;
-};
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -139,7 +138,7 @@ const Signup = () => {
       <div className="left-side">
         <form onSubmit={handleSubmit}>
           <div className="input-wrapper">
-            <h2>Welcome back</h2>
+            <h2>Welcome!</h2>
             <p>Please enter your details</p>
 
             <CommonInput
@@ -180,6 +179,7 @@ const Signup = () => {
               onChange={handleChange}
               placeholder="Enter your password"
               error={errors.password}
+              isPassword={true}
             />
 
             <CommonInput
@@ -190,6 +190,7 @@ const Signup = () => {
               onChange={handleChange}
               placeholder="Re-enter your password"
               error={errors.confirmPassword}
+              isPassword={true}
             />
 
             <PrimaryButton type="submit">Sign Up</PrimaryButton>
