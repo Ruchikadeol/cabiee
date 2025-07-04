@@ -121,6 +121,7 @@ const Signin = () => {
               onChange={handleChange}
               placeholder="Enter your password"
               error={errors.password}
+              isPassword={true}
             />
 
             <PrimaryButton type="submit">Sign In</PrimaryButton>

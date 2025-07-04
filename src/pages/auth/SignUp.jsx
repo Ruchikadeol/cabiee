@@ -181,17 +181,18 @@ const Signup = () => {
               error={errors.password}
               isPassword={true}
             />
-
-            <CommonInput
-              label="Confirm Password"
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Re-enter your password"
-              error={errors.confirmPassword}
-              isPassword={true}
-            />
+            <div className="confirm-password">
+              <CommonInput
+                label="Confirm Password"
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Re-enter your password"
+                error={errors.confirmPassword}
+                isPassword={true}
+              />
+            </div>
 
             <PrimaryButton type="submit">Sign Up</PrimaryButton>
 

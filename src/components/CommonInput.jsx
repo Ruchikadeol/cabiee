@@ -3,7 +3,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const CommonInput = ({
   label,
-  type,
+  type = "text",
   name,
   value,
   onChange,
@@ -13,43 +13,32 @@ const CommonInput = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const togglePasswordVisibility = () => {
+  const togglePassword = () => {
     setShowPassword((prev) => !prev);
   };
+
+  const inputType = isPassword ? (showPassword ? "text" : "password") : type;
 
   return (
     <div className="common-input">
       {label && <label htmlFor={name}>{label}</label>}
-      <div className="input-field" style={{ position: "relative" }}>
+      <div className="input-password-wrapper">
         <input
-          type={isPassword ? (showPassword ? "text" : "password") : type}
+          type={inputType}
           name={name}
           id={name}
           value={value}
-          placeholder={placeholder}
           onChange={onChange}
+          placeholder={placeholder}
           className={error ? "error-input" : ""}
-          style={{ paddingRight: isPassword ? "2.5rem" : undefined }}
         />
-
         {isPassword && (
-          <span
-            onClick={togglePasswordVisibility}
-            style={{
-              position: "absolute",
-              right: "0.6rem",
-              top: "60%",
-              transform: "translateY(-50%)",
-              cursor: "pointer",
-              color: "#888",
-            }}
-          >
+          <span className="toggle-password" onClick={togglePassword}>
             {showPassword ? <VisibilityOff /> : <Visibility />}
           </span>
         )}
       </div>
-
-      {error && <p className="error-text">{error}</p>}
+      {error && <div className="error-text">{error}</div>}
     </div>
   );
 };

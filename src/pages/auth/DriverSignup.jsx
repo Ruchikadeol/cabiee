@@ -221,17 +221,18 @@ const DriverSignup = () => {
               error={errors.password}
               isPassword={true}
             />
-
-            <CommonInput
-              label="Confirm Password"
-              name="confirmPassword"
-              type="password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Re-enter your password"
-              error={errors.confirmPassword}
-              isPassword={true}
-            />
+            <div className="confirm-password">
+              <CommonInput
+                label="Confirm Password"
+                name="confirmPassword"
+                type="password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Re-enter your password"
+                error={errors.confirmPassword}
+                isPassword={true}
+              />
+            </div>
 
             <PrimaryButton type="submit">Sign Up</PrimaryButton>
 
